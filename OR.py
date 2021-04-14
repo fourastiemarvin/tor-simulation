@@ -7,32 +7,29 @@ class OR(threading.Thread):
     # TODO: add keys management
 
     def __init__(self):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         threading.Thread.__init__(self)
-        self.socket = sock
+        self.sockIn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sockOut = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.signal = True
 
     # send cell to an OR
     # TODO: handle different cells
     def sendCell(self, cell, newOR):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect(("", newOR.portIn))
-        sock.sendall(str.encode(str(cell)))
-        print("cell sent:", str(cell))
-
-    # wait for connection
-    def newConnections(self):
-        while True:
-            sock, address = self.socket.accept()
-            print(address,"connected")
+        self.sockOut.connect(("", newOR.portIn))
+        self.portOut = self.sockOut.getsockname()[1]
+        self.sockOut.sendall(str.encode(str(cell)))
+        print("cell %s sent from port %d to port %d:" % (str(cell), self.portOut, newOR.portIn))
 
     # listen to a random port (simulate dynamic IP adress)
     def run(self):
-        self.socket.bind(("", 0))
-        self.portIn = self.socket.getsockname()[1]
-        print("running on port:", self.portIn)
-        self.socket.listen(1)
-
-        #Create new thread to wait for connections
-        newConnectionsThread = threading.Thread(target = self.newConnections)
-        newConnectionsThread.start()
+        self.sockIn.bind(("", 0))
+        self.portIn = self.sockIn.getsockname()[1]
+        self.sockIn.listen(1)
+        print("listen on port:", self.portIn)
+        conn, addr = self.sockIn.accept()
+        with conn:
+            print('Connected by', addr)
+            while True:
+                data = conn.recv(1024)
+                if not data:
+                    break
