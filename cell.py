@@ -4,16 +4,18 @@ class Cell():
         self.payload = payload
 
     def __str__(self):
-        return ("<" + str(self.command) + " : "
-                   + str(self.payload) + ">")
+        return ("< " + str(self.command) + " : "
+                   + str(self.payload) + " >")
 
-    def execute(self, orSend, orRecv):
+    def execute(self,OR):
         # creat a connection with a new node
         if self.command == "create":
             # receiver will listen at a new port
-            orRecv.bind(("", 0))
+            # orRecv.bind(("", 0))
             # receiver set the port to connect of the sender
-            orSend.portOut = orRecv.portIn
+            # orSend.portOut = orRecv.portIn
+            print("execute create")
+
 
         elif self.command == "destroy":
             return None

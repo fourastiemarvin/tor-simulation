@@ -3,8 +3,8 @@ from OR import *
 import socket
 import threading
 
-OR1 = OR()
-OR2 = OR()
+OR1 = OR("Alice")
+OR2 = OR("Bob")
 OR1.start()
 OR2.start()
 OR2.sendCell(Cell("create","message"), OR1)
