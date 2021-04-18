@@ -2,6 +2,7 @@ import socket, pickle
 import threading
 import sys
 from cell import *
+import pyDH
 
 class OR(threading.Thread):
     # TODO: add keys management
@@ -11,7 +12,9 @@ class OR(threading.Thread):
         self.name = name
         self.sockIn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sockOut = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.signal = True
+        self.dh = pyDH.DiffieHellman(5)
+        self.pubKey = self.dh.gen_public_key()
+        self.sharedKey = None
 
     # send cell to an OR
     def sendCell(self, cell, newOR):

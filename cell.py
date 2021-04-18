@@ -1,3 +1,5 @@
+import pyDH
+
 class Cell():
     def __init__(self, command, payload):
         self.command = command
@@ -8,15 +10,17 @@ class Cell():
                    + str(self.payload) + " >")
 
     def execute(self,OR):
-        # creat a connection with a new node
+        # create a connection with a new node
         if self.command == "create":
-            # receiver will listen at a new port
-            # orRecv.bind(("", 0))
-            # receiver set the port to connect of the sender
-            # orSend.portOut = orRecv.portIn
-            print("execute create")
-
-
+            # check if the receiver is the good one
+            if self.payload["hop"] == 0:
+                # create sharedKey using received pubKey
+                OR.sharedKey = OR.dh.gen_shared_key(self.payload["pubKey"])
+                print(OR.sharedKey)
+            else:
+                self.payload["hop"] -= 1
+        elif self.command == "extend":
+            return None
         elif self.command == "destroy":
             return None
         else:
