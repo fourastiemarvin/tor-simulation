@@ -14,6 +14,7 @@ class OR(threading.Thread):
         self.sockOut = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.exitOR = None
         self.isConnected = False
+        self.recvCell = None
         # generate private key
         self.dh = pyDH.DiffieHellman(5)
         self.pubKey = self.dh.gen_public_key()
@@ -39,6 +40,7 @@ class OR(threading.Thread):
             time.sleep(1)
             data = conn.recv(1024)
             dataObj = pickle.loads(data)
+            self.recvCell = str(dataObj)
             print("\n %s have received <%s> cell" % (self.name, dataObj.command))
             dataObj.execute(self)
             if not data:

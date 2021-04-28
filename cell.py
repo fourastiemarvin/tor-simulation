@@ -17,6 +17,7 @@ class Cell():
         elif self.command == "extend":
             if self.payload["hop"] == 1:
                 self.command = "create"
+                self.payload["pubKey"] = OR.pubKey
                 OR.sendCell(self,OR.exitOR)
 
 
