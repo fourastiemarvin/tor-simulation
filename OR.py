@@ -4,6 +4,7 @@ import sys
 from cell import *
 import pyDH
 import time
+from tools import *
 
 class OR(threading.Thread):
 
@@ -15,7 +16,7 @@ class OR(threading.Thread):
         self.exitOR = None
         self.isConnected = False
         self.recvCell = None
-        # generate private key
+        # generate DH instance
         self.dh = pyDH.DiffieHellman(5)
         self.pubKey = self.dh.gen_public_key()
         self.sharedKey = []
@@ -26,6 +27,7 @@ class OR(threading.Thread):
             self.sockOut.connect(("", newOR.portIn))
             self.isConnected = True
         self.portOut = self.sockOut.getsockname()[1]
+        # if cell.command == extend
         self.sockOut.sendall(pickle.dumps(cell))
         print("\n %s have sent <%s> cell" % (self.name, cell.command))
 
