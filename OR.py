@@ -64,15 +64,17 @@ class OR(threading.Thread):
             data = conn.recv(4096)
             dataObj = pickle.loads(data)
             self.recvCell = str(dataObj)
+            if type(dataObj) == str:
+                dataObj = encryptDecrypt(dataObj, self.sharedKey[0])
             try:
-                dataObj.command
+                dataObj = pickle.loads(ast.literal_eval(dataObj))
             except:
-                tmp = encryptDecrypt(dataObj, self.sharedKey[0])
-                dataObj = pickle.loads(ast.literal_eval(tmp))
+                dataObj = dataObj
             if type(dataObj) == Cell:
                 dataObj.execute(self)
                 print("\n %s have received <%s> cell" % (self.name, dataObj.command))
             else:
+                # remove an onion layer by decripting
                 cellToSend = pickle.dumps(encryptDecrypt(str(pickle.dumps(dataObj)), self.sharedKey[0]))
                 self.sendCell(cellToSend, self.exitOR, toForward=True)
                 print("\n %s receive cell to forward" % (self.name))
