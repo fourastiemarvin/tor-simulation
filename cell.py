@@ -18,15 +18,3 @@ class Cell():
             if self.payload["hop"] == 1:
                 self.command = "create"
                 OR.sendCell(self,OR.exitOR)
-
-
-        # send a message to a server (here to another node to chat)
-        # elif self.command == "relay":
-        #     if self.payload["hop"] == 0:
-        #         return self.payload["message"]
-        #     else:
-        #         self.payload["hop"] -= 1
-        # elif self.command == "destroy":
-        #     return None
-        # else:
-        #     print("Unknown command")
