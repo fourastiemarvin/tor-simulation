@@ -17,6 +17,11 @@ class OnionService(threading.Thread):
         self.sockOut = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.isConnected = False
 
+    def sendInput(self):
+        message = input()
+        self.sockOut.sendall(pickle.dumps(message))
+
+
     def run(self):
         self.sockOR.bind(("", 0))
         self.sockIn.bind(("", 0))
@@ -32,12 +37,10 @@ class OnionService(threading.Thread):
         print("sending on port:", self.sockOut.getsockname()[1])
         portToSend = int(input("Port: "))
         self.sockOut.connect(("", portToSend))
+        conn, addr = self.sockIn.accept()
         while True:
-            if self.isConnected == False:
-                conn, addr = self.sockIn.accept()
-                self.isConnected = True
-            message = input("> ")
-            self.sockOut.sendall(pickle.dumps(message))
+            input_thread = threading.Thread(target=self.sendInput)
+            input_thread.start()
             data = conn.recv(4096)
             print(pickle.loads(data))
             if not data:
