@@ -47,7 +47,6 @@ bob.sharedKey.append(bob.dh.gen_shared_key(relay1.pubKey))
 
 time.sleep(1)
 bob.sendCell(Cell("extend", {"hop":1, "pubKey":bob.pubKey, "destination":relay2.name}), relay1)
-relay1.sharedKey.append(relay1.dh.gen_shared_key(relay2.pubKey))
 bob.sharedKey.append(bob.dh.gen_shared_key(relay2.pubKey))
 
 time.sleep(3)

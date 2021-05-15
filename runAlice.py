@@ -47,7 +47,6 @@ alice.sharedKey.append(alice.dh.gen_shared_key(relay1.pubKey))
 
 time.sleep(1)
 alice.sendCell(Cell("extend", {"hop":1, "pubKey":alice.pubKey, "destination":relay2.name}), relay1)
-relay1.sharedKey.append(relay1.dh.gen_shared_key(relay2.pubKey))
 alice.sharedKey.append(alice.dh.gen_shared_key(relay2.pubKey))
 
 time.sleep(3)
