@@ -14,7 +14,7 @@ import ast
 #   - start of a (pseudo-) hidden service
 #
 # To simplify the proof of concept, we omits the following features:
-#   - circID and tables to keys handling (here each key is stored by the node)
+#   - circID and tables to keys management (here each key is stored by the node)
 #   - responses cells (simulated by the sender node)
 #   - Rendez-vous Points and Introduction Points (simulated by communication between Onion services)
 #   - Back propagation of the message received by the server (work like onion routing)
@@ -41,12 +41,12 @@ bobService.start()
 
 # bob encrypt n times regarding to the n nodes to the destination (extend)
 time.sleep(1)
-bob.sendCell(Cell("create",{"pubKey":bob.pubKey}), relay1)
+bob.sendCell(Cell("create",{"pubDH":bob.pubKey}), relay1)
 # compute relay1 sharedKey
 bob.sharedKey.append(bob.dh.gen_shared_key(relay1.pubKey))
 
 time.sleep(1)
-bob.sendCell(Cell("extend", {"hop":1, "pubKey":bob.pubKey, "destination":relay2.name}), relay1)
+bob.sendCell(Cell("extend", {"pubDH":bob.pubKey, "destination":relay2.name}), relay1)
 bob.sharedKey.append(bob.dh.gen_shared_key(relay2.pubKey))
 
 time.sleep(3)

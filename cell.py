@@ -12,9 +12,8 @@ class Cell():
     def execute(self,OR):
         # create a connection with a new node
         if self.command == "create":
-            OR.sharedKey.append(OR.dh.gen_shared_key(self.payload["pubKey"]))
+            OR.sharedKey.append(OR.dh.gen_shared_key(self.payload["pubDH"]))
         # extend the network by 1
         elif self.command == "extend":
-            if self.payload["hop"] == 1:
-                self.command = "create"
-                OR.sendCell(self,OR.exitOR)
+            self.command = "create"
+            OR.sendCell(self,OR.exitOR)

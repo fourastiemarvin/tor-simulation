@@ -14,7 +14,7 @@ import ast
 #   - start of a (pseudo-) hidden service
 #
 # To simplify the proof of concept, we omits the following features:
-#   - circID and tables to keys handling (here each key is stored by the node)
+#   - circID and tables to keys management (here each key is stored by the node)
 #   - responses cells (simulated by the sender node)
 #   - Rendez-vous Points and Introduction Points (simulated by communication between Onion services)
 #   - Back propagation of the message received by the server (work like onion routing)
@@ -41,12 +41,12 @@ aliceService.start()
 
 # alice encrypt n times regarding to the n nodes to the destination (extend)
 time.sleep(1)
-alice.sendCell(Cell("create",{"pubKey":alice.pubKey}), relay1)
+alice.sendCell(Cell("create",{"pubDH":alice.pubKey}), relay1)
 # compute relay1 sharedKey
 alice.sharedKey.append(alice.dh.gen_shared_key(relay1.pubKey))
 
 time.sleep(1)
-alice.sendCell(Cell("extend", {"hop":1, "pubKey":alice.pubKey, "destination":relay2.name}), relay1)
+alice.sendCell(Cell("extend", {"pubDH":alice.pubKey, "destination":relay2.name}), relay1)
 alice.sharedKey.append(alice.dh.gen_shared_key(relay2.pubKey))
 
 time.sleep(3)
